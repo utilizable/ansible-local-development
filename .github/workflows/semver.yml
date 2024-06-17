@@ -1,0 +1,48 @@
+name: semver 
+
+# Allow repository modyfication;
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  # Allow to re-use this jobs;
+  workflow_call:
+  # Trigger minor update;
+  # Trigger patch update;
+  push:
+  # Trigger major update;
+  workflow_dispatch:
+
+jobs:
+
+# -----------------
+# SEMVER MAJOR
+# -----------------
+
+  semver-major:
+    # Restrict to manual startup; 
+    # Restrict to default branch;
+    if: ${{ (github.event_name == 'workflow_dispatch' && github.actor) &&
+            (always() && (format('refs/heads/{0}', github.event.repository.default_branch) == github.ref)) }}
+    uses: ./.github/workflows/major.yml
+    
+# -----------------
+# SEMVER MINOR
+# -----------------
+
+  semver-minor:
+    # Restrict to push startup; 
+    # Restrict to default branch;
+    if: ${{ (github.event_name == 'push') &&
+            (always() && (format('refs/heads/{0}', github.event.repository.default_branch) == github.ref)) }}
+    uses: ./.github/workflows/minor.yml
+        
+# -----------------
+# SEMVER PATCH
+# -----------------
+   
+  semver-patch:
+    # Restrict to the fix branch; 
+    if: ${{ startsWith(github.ref, 'refs/heads/fix/') && endsWith(github.ref, '.x') }}
+    uses: ./.github/workflows/patch.yml
