@@ -3,6 +3,9 @@
 name: playbook 
 
 on: 
+  # Allow to re-use this jobs;
+  workflow_call:
+  # Trigger manualy
   workflow_dispatch:
     inputs:
       ssh_host:
