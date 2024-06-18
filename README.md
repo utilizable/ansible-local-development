@@ -7,12 +7,12 @@ This repository serves as a build automation for local development.
 Definied ansible roles.
 
 - `python` - Install python, which is need to run later jobs, 
-- `misc` - Package lists which will be installed on target,
+- `misc` - Lists of packages which will be installed on given target,
 - `act` - Run github actions localy,
 - `docker` - Container technology,
-- `terraform` - Provisoring,
-- `helm` - Kubernetes helm package manger,
-- `neovim` - Buffed vim
+- `terraform` - Provisioning,
+- `helm` - Kubernetes package manger,
+- `neovim` - Improved vim
 - `kubectl` - Kubernetes client, 
 - `k9s` - Kubernetes IDE,
 - `k3d` - Kubernetes on top of docker engine.
