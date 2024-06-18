@@ -1,8 +1,10 @@
 # playbook.yml
 
 name: playbook 
-
 on: 
+  # Allow to re-use this jobs;
+  workflow_call:
+  # Trigger manually;
   workflow_dispatch:
     inputs:
       ssh_host:
@@ -17,9 +19,6 @@ on:
       ssh_pass:
         description: 'SSH password'
         required: true
-
-permissions:
-  contents: read
 
 jobs:
   playbook:
