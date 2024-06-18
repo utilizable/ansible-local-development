@@ -1,0 +1,56 @@
+# playbook.yml
+
+name: playbook 
+
+on: 
+  workflow_dispatch:
+    inputs:
+      ssh_host:
+        description: 'SSH host ( ip / fqdn name )'     
+        required: true
+      ssh_port:
+        description: 'SSH port'
+        required: true
+      ssh_user:
+        description: 'SSH user'
+        required: true
+      ssh_pass:
+        description: 'SSH password'
+        required: true
+
+jobs:
+  playbook:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set dependencies
+        run: |
+          # https://askubuntu.com/questions/1420966
+          sudo GNUTLS_CPUID_OVERRIDE=0x1 apt-get update
+          sudo GNUTLS_CPUID_OVERRIDE=0x1 apt-get install -y \
+              python3 \
+              ansible \
+              gettext-base \
+              sshpass \
+              jq
+
+      - name: Execute playbook 
+        working-directory: ./ansible
+        env:
+          TARGET_HOST: $(cat $GITHUB_EVENT_PATH | jq -r '.inputs.ssh_host' )
+          TARGET_PORT: $(cat $GITHUB_EVENT_PATH | jq -r '.inputs.ssh_port' )
+          TARGET_USER: $(cat $GITHUB_EVENT_PATH | jq -r '.inputs.ssh_user' )
+          TARGET_PASS: $(cat $GITHUB_EVENT_PATH | jq -r '.inputs.ssh_pass' )
+          ANSIBLE_HOST_KEY_CHECKING: "false"
+        run: |
+          ansible-playbook \
+          ./playbooks/playbook.yml \
+          --inventory \
+          ./inventories/hosts

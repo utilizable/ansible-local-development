@@ -1,0 +1,77 @@
+#!/usr/bin/env ansible-playbook
+
+#######################################
+# Configuration: 
+#######################################
+
+- name: Clone a Git repository
+  vars:
+    repo_url: "{{configuration.path}}"
+    dest_dir: "{{configuration.target}}"
+  block:
+    - name: Clone the repository
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ dest_dir }}"
+        version: HEAD
+        force: yes
+
+    - name: Packer - sync 
+      raw: |
+        nvim --headless \
+            -c 'autocmd User PackerComplete quitall' \
+            -c 'PackerSync'
+
+#######################################
+# Miscellaneous:
+#######################################
+
+- name: Purge vim and vi
+  package:
+    name:
+      - vim
+      - vim-tiny 
+    state: absent
+
+- name: Alias 
+  lineinfile:
+    path: ~/.bashrc
+    line: "alias vi=nvim"
+    insertafter: EOF
+    create: yes
+  become: true
+  become_user: root
+
+#######################################
+# Plugins: 
+#######################################
+
+- name: Install plugins dependencies - package
+  package:
+    name: "{{ item }}"
+    state: present
+  loop: 
+    "{{ 
+      plugins | 
+      selectattr('package', 'defined') | 
+      map(attribute='package') | 
+      flatten | 
+      list 
+    }}"
+  when: plugins | selectattr('package', 'defined') | list | length > 0
+
+- name: Install plugins dependencies - raw 
+  shell: "{{item}}"
+  loop: 
+    "{{ 
+      plugins | 
+      selectattr('raw', 'defined') | 
+      map(attribute='raw') | 
+      flatten | 
+      list 
+    }}"
+  when: plugins | selectattr('raw', 'defined') | list | length > 0
+
+- name: Mason - sync
+  shell: nvim --headless -c 'MasonInstall {{ item.name }}' -c qall
+  loop: "{{ plugins }}"

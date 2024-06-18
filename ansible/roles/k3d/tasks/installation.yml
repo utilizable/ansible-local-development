@@ -1,0 +1,26 @@
+#!/usr/bin/env ansible-playbook
+
+######################################
+# BASE 
+######################################
+
+- name: Gather system facts
+  setup:
+
+- name: Presence
+  command: k3d --version
+  register: check
+  changed_when: false
+  failed_when: false
+
+- name: Installation
+  block:
+
+    - name: Prerequisites
+      package:
+        name:
+          - curl 
+        state: present
+
+    - name: Execution
+      raw: curl -sS https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash

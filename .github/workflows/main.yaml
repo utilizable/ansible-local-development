@@ -1,0 +1,29 @@
+name: workflow 
+
+# Allow repository modyfication;
+permissions:
+  contents: write
+  pull-requests: write
+  packages: write
+
+on:
+  # Trigger automaticly;  
+  push:
+  # Trigger manually;
+  workflow_dispatch:
+
+jobs:
+
+# -----------------
+# SEMVER 
+# -----------------
+
+  semver:
+    uses: utilizable/github-actions-semver-tagging/.github/workflows/tagging.yml@feat/output
+
+# -----------------
+# ANSIBLE 
+# -----------------
+
+  ansible:
+    uses: ./.github/workflows/ansible.yml

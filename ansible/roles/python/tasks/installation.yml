@@ -1,0 +1,12 @@
+#!/usr/bin/env ansible-playbook
+
+- name: Check Presence
+  raw: test -e /usr/bin/python3
+  changed_when: false
+  failed_when: false
+  register: check_output 
+
+- name: Install Package
+  raw: apt-get install -qq -y python3
+  when: check_output.rc != 0
+

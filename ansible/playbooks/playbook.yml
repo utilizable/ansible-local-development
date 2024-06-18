@@ -1,0 +1,104 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- hosts: target 
+ 
+  become:       false 
+  gather_facts: false 
+
+  roles:
+
+  #######################################
+  # Python 
+  #######################################
+  
+  - role: python 
+  
+  #######################################
+  # Miscellaneous 
+  #######################################
+  
+  - role: miscs
+    package:
+      - make 
+      - bash-completion
+      - tree
+      - awscli
+      - azure-cli
+      - 7zip
+      - git
+      - tmux
+
+  #######################################
+  # Act 
+  #######################################
+  
+  - role: act 
+
+  #######################################
+  # Docker 
+  #######################################
+  
+  - role: docker 
+
+  #######################################
+  # Terraform 
+  #######################################
+  
+  - role: terraform 
+  
+  #######################################
+  # Helm 
+  #######################################
+
+  - role: helm 
+  
+  #######################################
+  # Nevim 
+  #######################################
+  
+  - role: neovim
+    configuration:
+      path: "https://github.com/utilizable/nvim"
+      target: "~/.config/nvim"
+    plugins:
+      - name: helm-ls
+      - name: yaml-language-server
+      - name: gitlab-ci-ls
+        raw:
+          - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        package:
+          - cargo 
+      - name: docker-compose-language-service
+      - name: gopls
+        package:
+          - golang-go
+      - name: regols
+        package:
+          - golang-go
+
+  #######################################
+  # Kubernetes Client
+  #######################################
+  
+  - role: kubectl 
+    plugins:
+      - oidc-login
+      - popeye
+      - kubescape
+      - access-matrix
+      - get-all
+  
+  #######################################
+  # K9S 
+  #######################################
+
+  - role: k9s
+
+  #######################################
+  # K3D
+  #######################################
+
+  - role: k3d 
+
+...

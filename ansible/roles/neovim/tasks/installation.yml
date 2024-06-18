@@ -1,0 +1,61 @@
+#!/usr/bin/env ansible-playbook
+
+######################################
+# BASE 
+######################################
+
+- name: Gather system facts
+  setup:
+
+- name: Presence
+  command: nvim --version
+  register: check_nvim
+  changed_when: false
+  failed_when: false
+
+- name: Building
+  block:
+    - name: Get Prerequisites
+      package:
+        name:
+          - ninja-build
+          - gettext
+          - gcc
+          - cmake
+          - unzip
+          - curl
+          - git 
+          - file 
+          - dpkg-dev
+          - npm
+          - build-essential
+        state: present
+
+    - name: Clone source repo 
+      git:
+        repo: https://github.com/neovim/neovim.git
+        dest: /tmp/neovim 
+        version: release-0.9
+
+    - name: Prepare
+      raw: |
+        cd /tmp/neovim && \
+        make CMAKE_BUILD_TYPE=RelWithDebInfo
+    
+    - name: Install
+      raw: |
+        cd /tmp/neovim/build && \
+        cpack -G DEB && \
+        dpkg -i nvim-linux64.deb 
+  when: check_nvim.rc != 0
+
+######################################
+# PLUGIN-MANAGER
+######################################
+
+- name: PluginManager - Packer
+  block:
+    - name: Prepare
+      git:
+        repo: https://github.com/wbthomason/packer.nvim
+        dest: ~/.local/share/nvim/site/pack/packer/start/packer.nvim

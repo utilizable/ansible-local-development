@@ -1,0 +1,18 @@
+#!/usr/bin/env ansible-playbook
+
+#####################################
+# Configuration: 
+#####################################
+
+- name: Bashrc
+  blockinfile: 
+    block: |
+        if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+        fi
+    path: ~/.bashrc
+  become: true
+  become_user: root
+
+- name: Bash Completion - Git
+  command: cp /usr/share/bash-completion/completions/git /etc/bash_completion.d/git

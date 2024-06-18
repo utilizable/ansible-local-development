@@ -1,0 +1,42 @@
+#!/usr/bin/env ansible-playbook
+
+#####################################
+# CONFIGURATION 
+#####################################
+
+- name: K9S - Plugins
+  block:
+   - name: Prerequisites
+     block:
+      - name: Create plugin file 
+        file:
+          path: /root/.config/k9s/plugins.yaml
+          state: touch
+
+      - name: Initial plugin config 
+        lineinfile:
+         path: /root/.config/k9s/plugins.yaml
+         line: "plugins:"
+         insertafter: EOF
+         create: yes
+        become: true
+        become_user: root
+
+   - name: K9S - Plugins - Dive
+     blockinfile: 
+       block: 
+        - |
+          dive:
+            shortCut: d
+            confirm: false
+            description: "Dive image"
+            scopes:
+              - containers
+            command: dive
+            background: false
+            args:
+              - $COL-IMAGE
+       path: ~/.config/k9s/plugins.yaml
+       insertafter: EOF
+     become: true
+     become_user: root

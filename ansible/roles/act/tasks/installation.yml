@@ -1,0 +1,29 @@
+#!/usr/bin/env ansible-playbook
+
+######################################
+# BASE 
+######################################
+
+- name: Gather system facts
+  setup:
+
+- name: Presence
+  command: act --version
+  register: check_act
+  changed_when: false
+  failed_when: false
+
+- name: Installing 
+  block:
+    - name: Get Prerequisites
+      package:
+        name:
+          - golang-go 
+          - curl
+        state: present
+
+    - name: Build
+      raw: |
+        export BINDIR=/bin && curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/nektos/act/master/install.sh | bash
+
+  when: check_act.rc != 0

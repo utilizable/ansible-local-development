@@ -1,0 +1,14 @@
+#!/usr/bin/env ansible-playbook
+
+#######################################
+## BASE 
+#######################################
+
+- name: Gather system facts
+  setup:
+
+- name: Install Packages 
+  package:
+    name: "{{item}}"
+    state: present
+  loop: "{{package}}"

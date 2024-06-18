@@ -1,0 +1,48 @@
+#!/usr/bin/env ansible-playbook
+
+######################################
+# BASE 
+#######################################
+
+- name: Gather system facts
+  setup:
+
+- name: Presence
+  command: k9s info
+  register: check_k9s
+  changed_when: false
+  failed_when: false
+
+- name: Installing 
+  block:
+    - name: Prerequisites
+      package:
+        name:
+          - curl 
+        state: present
+
+    - name: Execute 
+      raw: curl -sS https://webinstall.dev/k9s | bash
+
+    - name: Test 
+      command: k9s info >/dev/null
+
+    - name: Cleanup
+      command: rm -rf ~/Downloads
+
+  when: check_k9s.rc !=0
+
+######################################
+# PLUGINS
+######################################
+
+- name: Plugins - Dive
+  block:
+    - name: Copy
+      copy:
+        src: ../files/get-dive.sh
+        dest: /tmp/get-dive.sh
+        mode: '0755'  
+
+    - name: Execute 
+      shell: /tmp/get-dive.sh

@@ -1,0 +1,46 @@
+#!/usr/bin/env ansible-playbook
+
+######################################
+# BASE 
+######################################
+
+- name: Gather system facts
+  setup:
+
+- name: Presence
+  command: terraform version
+  register: check_terraform
+  changed_when: false
+  failed_when: false
+
+- name: Installation
+  block:
+
+    - name: Prerequisites
+      package:
+        name:
+          - gnupg
+          - software-properties-common
+          - wget
+        state: present
+
+    - name: GPG Key
+      get_url:
+        url: https://apt.releases.hashicorp.com/gpg
+        dest: /usr/share/keyrings/hashicorp-archive-keyring.asc
+        mode: '0644'
+        force: true
+
+    - name: APT Repository
+      apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.asc] https://apt.releases.hashicorp.com {{ ansible_distribution_release | lower }} main"
+        state: present
+
+    - name: Package Installation
+      package:
+        update_cache: true
+        name:
+          - terraform
+        state: present
+  when: check_terraform.rc != 0
+

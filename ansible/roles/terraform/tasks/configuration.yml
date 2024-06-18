@@ -1,0 +1,9 @@
+#!/usr/bin/env ansible-playbook
+
+#######################################
+# Configuration: 
+#######################################
+
+- name: Bash Completion
+  command: terraform -install-autocomplete
+  when: check_terraform.rc != 0

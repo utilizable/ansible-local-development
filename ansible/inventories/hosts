@@ -1,0 +1,8 @@
+[server]
+target
+
+[server:vars]
+ansible_ssh_host={{ lookup('env', 'TARGET_HOST') }}
+ansible_ssh_user={{ lookup('env', 'TARGET_USER') }}
+ansible_ssh_port={{ lookup('env', 'TARGET_PORT') }}
+ansible_ssh_pass={{ lookup('env', 'TARGET_PASS') }}

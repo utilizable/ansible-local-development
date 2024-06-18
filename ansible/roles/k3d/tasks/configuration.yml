@@ -1,0 +1,9 @@
+#!/usr/bin/env ansible-playbook
+
+#####################################
+# Configuration: 
+#####################################
+
+- name: Bash Completion 
+  shell: k3d completion bash | tee /etc/bash_completion.d/k3d > /dev/null
+

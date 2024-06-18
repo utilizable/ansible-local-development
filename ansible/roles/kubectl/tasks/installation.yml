@@ -1,0 +1,55 @@
+#!/usr/bin/env ansible-playbook
+
+#######################################
+# BASE 
+#######################################
+
+- name: Installation 
+  block:
+    - name: Package
+      package:
+        name:
+        - kubernetes-client
+        state: present
+
+#######################################
+# PLUGIN-MANAGER
+#######################################
+
+- name: PluginManager - Krew 
+  block:
+
+    - name: Dependency 
+      package:
+        name:
+        - curl
+        - git
+        state: present
+
+    - name: Prepare 
+      copy:
+        src: ../files/get-krew.sh
+        dest: /tmp/get-krew.sh
+        mode: '0755'  
+
+    - name: Execute 
+      shell: /tmp/get-krew.sh
+
+    - name: Configure 
+      lineinfile:
+        dest: "~/.bashrc"
+        line: export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+    - name: Test 
+      raw: kubectl krew >/dev/null 2>&1
+      register: is_rvm_exist
+      ignore_errors: true 
+
+#######################################
+# PLUGINS
+#######################################
+
+- name: Plugins
+  shell: kubectl krew install '{{ item }}'
+  loop: '{{ plugins }}'
+
