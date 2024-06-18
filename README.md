@@ -1,6 +1,6 @@
 Ansible - Local Development 
 ============
-This repository serves as a build automation for local development.
+This repository serves as a automation of creating local development setup.
 
 ## ⚙️  Ansible Roles 
 
