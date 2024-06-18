@@ -1,27 +1,28 @@
-Github Actions - Semver Tagging
+Ansible - Local Development 
 ============
-This repository serves as a semver template for all pojects.
+This repository serves as a build automation for local development.
 
-## 🔖 Reusing workflows
+## ⚙️  Ansible Roles 
 
-To reuse this actions you need to create github actions workflow file inside your targeted repository.
+Definied ansible roles.
 
-`./.github/workflows/semver.yml`
-```yml
-name: semver
+- `python` - Install python, which is need to run later jobs, 
+- `misc` - Package lists which will be installed on target,
+- `act` - Install act ~ run github actions localy,
+- `docker` - Container technology,
+- `terraform` - Provisoring,
+- `helm` - Kubernetes helm package manger,
+- `neovim` - Buffed vim
+- `kubectl` - Kubernetes client, 
+- `k9s` - Kubernetes IDE,
+- `k3d` - Kubernetes on top of docker engine.
 
-on:
-  push:
-  workflow_dispatch:
+## 🗄 Repository structure
 
-permissions:
-  contents: write
-  pull-requests: write
-
-jobs:
-  semver:
-    uses: utilizable/github-actions-semver-tagging/.github/workflows/semver.yml@develop
-```
+- `./ansible` - Ansible main directory,
+- `./ansible/playbooks` - Home of main ansible playbook,
+- `./ansible/roles` - Ansible roles,
+- `./ansible/inventories` - Ansible inventory - targets.
 
 ## 🔖 Versioning model
 
