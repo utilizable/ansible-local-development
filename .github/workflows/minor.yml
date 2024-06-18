@@ -1,0 +1,24 @@
+name: minor
+
+on:
+  workflow_call:
+
+jobs:
+  minor:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        shell: bash
+      
+    steps:
+      - uses: actions/checkout@v3
+        
+      - name: Bump version
+        run: |
+          REMOTE_VERSION=$(git ls-remote --tags --sort="v:refname" | tail -n1 | sed 's/.*\///; s/\^{}//');
+          CURRENT_VERSION="${REMOTE_VERSION:=0.0.0}"
+          NEXT_VERSION=$(docker run alpine/semver semver -c -i minor ${CURRENT_VERSION});
+          
+          git tag ${NEXT_VERSION};
+          git push --tags origin;

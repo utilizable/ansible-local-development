@@ -18,9 +18,6 @@ on:
         description: 'SSH password'
         required: true
 
-permissions:
-  contents: read
-
 jobs:
   playbook:
     runs-on: ubuntu-latest

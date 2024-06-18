@@ -1,0 +1,24 @@
+name: patch
+  
+on:
+  workflow_call:
+  
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        shell: bash
+        
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Bump version
+        run: |
+          GITHUB_REF=${GITHUB_REF//*\/}
+          CURRENT_VERSION="$(git ls-remote -q --tags | awk '{ print $2}'| sort -nr | sed 's/refs\/tags\///g' | grep ${GITHUB_REF//.x} | head -n1 )";
+          NEXT_VERSION=$(docker run alpine/semver semver -c -i patch ${CURRENT_VERSION});
+
+          git tag ${NEXT_VERSION};
+          git push --tags;
