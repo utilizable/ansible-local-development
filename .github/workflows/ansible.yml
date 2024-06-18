@@ -3,8 +3,8 @@
 name: playbook 
 
 on: 
-  # Trigger manually;
-  workflow_dispatch:
+  # Trigger automaticly;  
+  workflow_call:
 
 jobs:
   playbook:

@@ -9,8 +9,6 @@ permissions:
   packages: write
 
 on:
-  workflow_call:
-  # Trigger automaticly;  
   push:
   # Trigger manually;
   workflow_dispatch:
