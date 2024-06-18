@@ -3,8 +3,20 @@
 name: playbook 
 
 on: 
-  # Trigger automaticly;  
-  workflow_call:
+  workflow_dispatch:
+    inputs:
+      ssh_host:
+        description: 'SSH host ( ip / fqdn name )'     
+        required: true
+      ssh_port:
+        description: 'SSH port'
+        required: true
+      ssh_user:
+        description: 'SSH user'
+        required: true
+      ssh_pass:
+        description: 'SSH password'
+        required: true
 
 jobs:
   playbook:
