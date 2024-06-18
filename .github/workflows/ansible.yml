@@ -32,12 +32,13 @@ jobs:
       - name: Execute playbook 
         working-directory: ./ansible
         env:
-          TARGET_HOST: $(cat $GITHUB_EVENT_PATH | jq -r '.inputs.ssh_host' )
-          TARGET_PORT: $(cat $GITHUB_EVENT_PATH | jq -r '.inputs.ssh_port' )
-          TARGET_USER: $(cat $GITHUB_EVENT_PATH | jq -r '.inputs.ssh_user' )
-          TARGET_PASS: $(cat $GITHUB_EVENT_PATH | jq -r '.inputs.ssh_pass' )
           ANSIBLE_HOST_KEY_CHECKING: "false"
         run: |
+          export TARGET_HOST=$(cat $GITHUB_EVENT_PATH | jq -r '.inputs.ssh_host' )
+          export TARGET_PORT=$(cat $GITHUB_EVENT_PATH | jq -r '.inputs.ssh_port' )
+          export TARGET_USER=$(cat $GITHUB_EVENT_PATH | jq -r '.inputs.ssh_user' )
+          export TARGET_PASS=$(cat $GITHUB_EVENT_PATH | jq -r '.inputs.ssh_pass' )
+
           ansible-playbook \
           ./playbooks/playbook.yml \
           --inventory \
