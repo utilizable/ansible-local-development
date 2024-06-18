@@ -1,0 +1,94 @@
+---
+version: "3.9"
+
+volumes:
+  shared:
+
+services:
+
+  #######################################
+  # Testing: Dummy target 
+  #######################################
+  
+  dummy: 
+    image: debian 
+    build:
+      context: .
+      dockerfile: './dummy/Dockerfile'
+      args:
+        TARGET_PASS: '${TARGET_PASS}'
+    container_name: dummy
+    privileged: true
+    env_file:
+      - .env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  #######################################
+  # Ansible: Common definition 
+  #######################################
+  
+  common: &common
+     image: ghcr.io/utilizable/docker-image-ansible:develop 
+     working_dir: /app
+     entrypoint: ["/bin/bash", "-c"]
+     env_file:
+       - .env
+     volumes:
+       - shared:/app
+
+  #######################################
+  # Ansible: Prepare 
+  #######################################
+
+  prepare:
+    <<: *common
+    container_name: "prepare"
+    volumes:
+      - ../ansible:/ansible
+      - shared:/app
+    command:
+      - |
+        cp -r /ansible/* /app;
+
+  #######################################
+  # Ansible: Install requirements 
+  #######################################
+
+  requirements:
+    <<: *common
+    container_name: "requirements"
+    command:
+      - |
+        # install ansible roles 
+        # -
+        ansible-galaxy \
+        install \
+        -r \
+        requirements.yml
+
+  #######################################
+  # Ansible: Execute playbook 
+  #######################################
+  
+  playbook:
+    <<: *common
+    container_name: "playbook"
+    command:
+      - |
+        # append private key to ssh client 
+        # -
+        #eval $(ssh-agent); 
+        #ssh-add - <<< "${TARGET_ID_RSA}";
+
+        #ssh -o "StrictHostKeyChecking no" root@dummy "mkdir /test";
+        # evaluate ansible playbook
+        # -
+        ansible-playbook \
+        ./playbooks/playbook.yml \
+        --inventory \
+        ./inventories/hosts;
+    depends_on:
+      - dummy
+      - prepare
+...
