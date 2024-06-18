@@ -8,7 +8,7 @@ Definied ansible roles.
 
 - `python` - Install python, which is need to run later jobs, 
 - `misc` - Package lists which will be installed on target,
-- `act` - Install act ~ run github actions localy,
+- `act` - Run github actions localy,
 - `docker` - Container technology,
 - `terraform` - Provisoring,
 - `helm` - Kubernetes helm package manger,
