@@ -20,6 +20,7 @@
   
   - role: miscs
     package:
+      - curl
       - make 
       - bash-completion
       - tree

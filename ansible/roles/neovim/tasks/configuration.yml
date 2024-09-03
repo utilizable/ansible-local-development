@@ -22,6 +22,10 @@
             -c 'autocmd User PackerComplete quitall' \
             -c 'PackerSync'
 
+    - name: Enable Configuration
+      raw: |
+        sed -i 's/local initial_setup = true/local initial_setup = false/' "{{ dest_dir}}/init.lua"
+
 #######################################
 # Miscellaneous:
 #######################################

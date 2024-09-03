@@ -1,14 +1,19 @@
 #!/bin/bash
 
 echo "Installing dependencies" \
-  && apt-get update \
-  && apt-get install -y \
-    ansible \
-    python3 
+  && apt-get -qq update \
+  && apt-get -qq install -y \
+       python3 \
+       ansible \
+       gettext-base \
+       sshpass \
+       jq
 
-echo "Executing ansible" \
-  LC_ALL=C.UTF-8 \
-    ansible-playbook \
-    ./playbooks/playbook.yml \
-    --inventory \
-    ./inventories/hosts  
+# -----------------------
+
+echo "Executing Ansible " \
+  && TARGET_HOST=localhost \
+     LC_ALL=C.UTF-8 \
+     ANSIBLE_CONFIG=./ansible/ansible.cfg \
+     ANSIBLE_INVENTORY=./ansible/inventories/hosts \
+     ansible-playbook ./ansible/playbooks/playbook.yml
