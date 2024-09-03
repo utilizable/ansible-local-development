@@ -24,7 +24,7 @@
 
     - name: Enable Configuration
       raw: |
-        sed -i 's/local initial_setup = true/local initial_setup = false/' "{{ dest_dir}}/init.lua"
+        sed -i 's/local initial_setup = true/local initial_setup = false/' {{ dest_dir}}/init.lua
 
 #######################################
 # Miscellaneous:
