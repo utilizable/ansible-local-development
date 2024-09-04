@@ -77,15 +77,10 @@
     }}"
   when: plugins | selectattr('raw', 'defined') | list | length > 0
 
-- name: Source ~/.bashrc and perform the next task
-  shell: |
-    source ~/.bashrc
+- name: Mason - sync
+  raw: |
+    source ~/.bashrc;
     nvim --headless -c 'MasonInstall {{ item.name }}' -c qall
   args:
     executable: /bin/bash
-
-#- name: Mason - sync
-#  shell: |
-#    source ~/.bashrc
-#    nvim --headless -c 'MasonInstall {{ item.name }}' -c qall
-#  loop: "{{ plugins }}"
+  loop: "{{ plugins }}"

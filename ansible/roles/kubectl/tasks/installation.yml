@@ -41,9 +41,11 @@
         line: export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
     - name: Test 
-      raw: 
-        source ~/.bashrc
+      raw: |
+        PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH" \
         kubectl krew >/dev/null 2>&1
+      args:
+        executable: /bin/bash
       register: is_rvm_exist
       ignore_errors: true 
 
@@ -52,6 +54,8 @@
 #######################################
 
 - name: Plugins
-  shell: kubectl krew install '{{ item }}'
+  raw: |
+    PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH" \
+    kubectl krew install '{{ item }}'
   loop: '{{ plugins }}'
 
