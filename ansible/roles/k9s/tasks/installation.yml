@@ -25,7 +25,7 @@
       raw: curl -sS https://webinstall.dev/k9s | bash
 
     - name: Test 
-      command: k9s info >/dev/null
+      command: ~/.local/bin/k9s info >/dev/null
 
     - name: Cleanup
       command: rm -rf ~/Downloads
