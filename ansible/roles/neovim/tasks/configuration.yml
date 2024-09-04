@@ -50,6 +50,13 @@
 # Plugins: 
 #######################################
 
+- name: Source ~/.bashrc and perform the next task
+  shell: |
+    source ~/.bashrc
+    <your_next_command_here>
+  args:
+    executable: /bin/bash
+
 - name: Install plugins dependencies - package
   package:
     name: "{{ item }}"
@@ -77,5 +84,7 @@
   when: plugins | selectattr('raw', 'defined') | list | length > 0
 
 - name: Mason - sync
-  shell: nvim --headless -c 'MasonInstall {{ item.name }}' -c qall
+  shell: |
+    source ~/.bashrc
+    nvim --headless -c 'MasonInstall {{ item.name }}' -c qall
   loop: "{{ plugins }}"
