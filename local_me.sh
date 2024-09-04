@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo -e "\tInstalling dependencies" \
+echo -e "->Installing dependencies" \
   && apt-get -qq update \
   && apt-get -qq install -y \
        python3 \
@@ -11,7 +11,7 @@ echo -e "\tInstalling dependencies" \
 
 # -----------------------
 
-echo -e "\tExecuting Ansible " \
+echo -e "->Executing Ansible" \
   && TARGET_HOST=localhost \
      LC_ALL=C.UTF-8 \
      ANSIBLE_CONFIG=./ansible/ansible.cfg \
