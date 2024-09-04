@@ -1,14 +1,14 @@
 #!/bin/bash
 
-#echo -e "\tInstalling dependencies" \
-#  && apt-get -qq update \
-#  && apt-get -qq install -y \
-#       python3 \
-#       ansible \
-#       gettext-base \
-#       sshpass \
-#       jq
-#
+echo -e "\tInstalling dependencies" \
+  && apt-get -qq update \
+  && apt-get -qq install -y \
+       python3 \
+       ansible \
+       gettext-base \
+       sshpass \
+       jq
+
 # -----------------------
 
 echo -e "\tExecuting Ansible " \
