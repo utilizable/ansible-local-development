@@ -41,7 +41,9 @@
         line: export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
     - name: Test 
-      raw: kubectl krew >/dev/null 2>&1
+      raw: 
+        source ~/.bashrc
+        kubectl krew >/dev/null 2>&1
       register: is_rvm_exist
       ignore_errors: true 
 
