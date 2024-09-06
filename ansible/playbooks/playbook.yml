@@ -67,6 +67,11 @@
       target: "~/.config/nvim"
     plugins:
       - name: helm-ls
+        raw:
+          - |
+            curl -X GET \
+              https://github.com/mrjosh/helm-ls/releases/download/v0.1.0/helm_ls_linux_amd64 \
+              --output /usr/local/bin/helm_ls
       - name: yaml-language-server
         raw:
           - | 
